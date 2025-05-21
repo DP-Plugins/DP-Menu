@@ -1,10 +1,9 @@
 package com.darksoldier1404.dpm.functions;
 
 import com.darksoldier1404.dpm.Menu;
-import com.darksoldier1404.dppc.action.ActionBuilder;
-import com.darksoldier1404.dppc.action.helper.ActionGUI;
 import com.darksoldier1404.dppc.api.essentials.MoneyAPI;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.lang.DLang;
 import com.darksoldier1404.dppc.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,7 +11,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -21,7 +19,7 @@ import java.util.*;
 public class DPMFunction {
     private static final Menu plugin = Menu.getInstance();
     public static final Map<UUID, Quadruple<String, ItemStack, String, Integer>> currentEditItem = new HashMap<>();
-
+    private static final DLang lang = plugin.data.getLang();
     public static void openMenu(Player p, String name) {
         if (!isValid(name)) return;
         DInventory inv = getMenuInventory(name);
@@ -37,18 +35,18 @@ public class DPMFunction {
 
     public static void createMenu(Player p, String name, String srow) {
         if (isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "이미 존재하는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_exists"));
             return;
         }
         int row;
         try {
             row = Integer.parseInt(srow);
         } catch (NumberFormatException e) {
-            p.sendMessage(plugin.data.getPrefix() + "올바른 숫자를 입력해주세요.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong_num"));
             return;
         }
         if (row < 1 || row > 6) {
-            p.sendMessage(plugin.data.getPrefix() + "메뉴의 행은 1~6 사이여야 합니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong"));
             return;
         }
         YamlConfiguration data = new YamlConfiguration();
@@ -56,40 +54,40 @@ public class DPMFunction {
         data.set("Menu.ROWS", row);
         plugin.menus.put(name, data);
         saveMenu(name);
-        p.sendMessage(plugin.data.getPrefix() + name + " 메뉴가 생성되었습니다.");
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_create"));
     }
 
     public static void deleteMenu(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         new File(plugin.getDataFolder() + "/menus/" + name + ".yml").delete();
         plugin.menus.remove(name);
-        p.sendMessage(plugin.data.getPrefix() + name + " 메뉴가 삭제되었습니다.");
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_delete"));
     }
 
     public static void setTitle(Player p, String name, String... args) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         String title = ColorUtils.applyColor(getText(args, 2));
         plugin.menus.get(name).set("Menu.TITLE", title);
-        p.sendMessage(plugin.data.getPrefix() + name + "타이틀이 설정되었습니다. : " + title);
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_title")+ title);
         saveMenu(name);
     }
 
     public static void setAliases(Player p, String name, String aliases) {
         if (!plugin.menus.containsKey(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         YamlConfiguration data = plugin.menus.get(name);
         data.set("Menu.ALIASES", aliases);
         plugin.menus.put(name, data);
-        plugin.getLogger().info("등록된 명령어 : " + aliases);
-        p.sendMessage(plugin.data.getPrefix() + name + "메뉴의 단축 명령어가 설정되었습니다. : " + aliases);
+        plugin.getLogger().info(lang.get("menu_aliases_description") + aliases);
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_aliases") + aliases);
         saveMenu(name);
     }
 
@@ -105,28 +103,28 @@ public class DPMFunction {
 
     public static void setRow(Player p, String name, String srow) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         int row;
         try {
             row = Integer.parseInt(srow);
         } catch (NumberFormatException e) {
-            p.sendMessage(plugin.data.getPrefix() + "올바른 숫자를 입력해주세요.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong_num"));
             return;
         }
         if (row < 1 || row > 6) {
-            p.sendMessage(plugin.data.getPrefix() + "메뉴의 행은 1~6 사이여야 합니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong"));
             return;
         }
         plugin.menus.get(name).set("Menu.ROWS", row);
-        p.sendMessage(plugin.data.getPrefix() + name + "메뉴의 행이 설정되었습니다. : " + row);
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_row_set") + row);
         saveMenu(name);
     }
 
     public static void openItemSettingGUI(Player p, String name) { // 1
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -147,13 +145,13 @@ public class DPMFunction {
             }
         }
         saveMenu(name);
-        p.sendMessage(plugin.data.getPrefix() + name + " 메뉴의 아이템 설정이 저장되었습니다.");
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_items"));
     }
 
     public static DInventory getMenuInventory(String name) {
         YamlConfiguration data = plugin.menus.get(name);
         String rows = data.getString("Menu.ROWS");
-        String title = data.getString("Menu.TITLE") == null ? "타이틀이 설정되지 않았습니다." : data.getString("Menu.TITLE");
+        String title = data.getString("Menu.TITLE") == null ? lang.get("menu_title_not_set") : data.getString("Menu.TITLE");
         title = ColorUtils.applyColor(title);
         DInventory inv = new DInventory(null, title, Integer.parseInt(rows) * 9, plugin);
         if (data.get("Menu.ITEMS") != null) {
@@ -164,51 +162,9 @@ public class DPMFunction {
         return inv;
     }
 
-    public static void openCommandSettingGUI(Player p, String name) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setObj(Tuple.of(name, "COMMANDS"));
-        p.openInventory(inv);
-    }
-
-    public static void openCommandSettingGUI(Player p, String name, ItemStack item, int slot) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setItem(slot, item);
-        inv.setObj(Tuple.of(name, "COMMANDS"));
-        p.openInventory(inv);
-    }
-
-    public static void openSoundSettingGUI(Player p, String name) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setObj(Tuple.of(name, "SOUND"));
-        p.openInventory(inv);
-    }
-
-    public static void openSoundSettingGUI(Player p, String name, ItemStack item, int slot) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setItem(slot, item);
-        inv.setObj(Tuple.of(name, "SOUND"));
-        p.openInventory(inv);
-    }
-
     public static void openPriceSettingGUI(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -218,7 +174,7 @@ public class DPMFunction {
 
     public static void openPriceSettingGUI(Player p, String name, ItemStack item, int slot) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -227,31 +183,12 @@ public class DPMFunction {
         p.openInventory(inv);
     }
 
-    public static void openOPSettingGUI(Player p, String name) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setObj(Tuple.of(name, "OP"));
-        p.openInventory(inv);
-    }
-
-    public static ItemStack setCommand(ItemStack item, String command) {
-        return NBT.setStringTag(item, "dpm.command", command);
-    }
-
-    public static ItemStack setSound(ItemStack item, String sound) {
-        String name = sound.split(" ")[0];
-        String volume = sound.split(" ")[1];
-        String pitch = sound.split(" ")[2];
-        item = NBT.setStringTag(item, "dpm.sound", name);
-        item = NBT.setStringTag(item, "dpm.sound.volume", volume);
-        return NBT.setStringTag(item, "dpm.sound.pitch", pitch);
-    }
-
     public static ItemStack setPrice(ItemStack item, String price) {
         return NBT.setStringTag(item, "dpm.price", price);
+    }
+
+    public static ItemStack setAction(ItemStack item, String action) {
+        return NBT.setStringTag(item, "dpm.action", action);
     }
 
     public static boolean isValid(String name) {
@@ -276,7 +213,6 @@ public class DPMFunction {
         while (i.hasNext()) {
             s.append(i.next()).append(" ");
         }
-        // delete last space
         if (s.charAt(s.length() - 1) == ' ') {
             s.deleteCharAt(s.length() - 1);
         }
@@ -285,7 +221,7 @@ public class DPMFunction {
 
     public static void openCWCSettingGUI(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -311,11 +247,6 @@ public class DPMFunction {
 
     public static String initReplacer(ItemStack item, String text, Player p) {
         text = text.replace("<price>", NBT.getStringTag(item, "dpm.price"));
-        text = text.replace("<command>", NBT.getStringTag(item, "dpm.command"));
-        text = text.replace("<sound>", NBT.getStringTag(item, "dpm.sound"));
-        text = text.replace("<sound_volume>", NBT.getStringTag(item, "dpm.sound.volume"));
-        text = text.replace("<sound_pitch>", NBT.getStringTag(item, "dpm.sound.pitch"));
-        text = text.replace("<op>", NBT.getStringTag(item, "dpm.op"));
         text = text.replace("<cwc>", NBT.getStringTag(item, "dpm.cwc"));
         text = text.replace("<p_name>", p.getName());
         text = text.replace("<p_displayname>", p.getDisplayName());
@@ -333,12 +264,13 @@ public class DPMFunction {
         return text;
     }
 
-    public static void openActionSettingGUI(Player p, @NotNull String name) {
+    public static void openActionSettingGUI(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + "존재하지 않는 메뉴입니다.");
+            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
             return;
         }
-        ActionGUI ag = new ActionGUI(plugin);
-        ag.openActionBuilderGUI(p);
+        DInventory inv = getMenuInventory(name);
+        inv.setObj(Tuple.of(name, "ACTION"));
+        p.openInventory(inv);
     }
 }

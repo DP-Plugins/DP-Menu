@@ -14,7 +14,6 @@ public class Menu extends JavaPlugin {
     private static Menu plugin;
     public static DataContainer data;
     public static final Map<String, YamlConfiguration> menus = new HashMap<>();
-
     public static Menu getInstance() {
         return plugin;
     }
@@ -24,7 +23,7 @@ public class Menu extends JavaPlugin {
         plugin = this;
         data = new DataContainer(plugin);
         plugin.getServer().getPluginManager().registerEvents(new DPMEvent(), plugin);
-        getCommand("dpm").setExecutor(new DPMCommand());
+        getCommand("dpm").setExecutor(new DPMCommand().getExecuter());
         DPMFunction.loadAllMenus();
     }
 

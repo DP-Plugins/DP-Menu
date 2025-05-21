@@ -1,1 +1,42 @@
 Lang: Korean
+# commands
+player_only: "플레이어만 사용 가능한 명령어 입니다."
+help_open: "/dpm open <name> - 메뉴를 오픈합니다."
+help_create: "/dpm create <name> <row> - 메뉴를 생성합니다."
+help_delete: "/dpm delete <name> - 메뉴를 삭제합니다."
+help_title: "/dpm title <name> <title> - 메뉴의 타이틀을 설정합니다."
+help_row: "/dpm row <name> <row> - 메뉴의 행을 설정합니다."
+help_items: "/dpm items <name> - 메뉴의 아이템을 설정합니다"
+help_cwc: "/dpm cwc <name> - 메뉴의 아이템 클릭시 메뉴를 닫히게 할지 설정합니다. (CloseWhenClick)"
+help_price: "/dpm price <name> - 메뉴의 클릭시 이용 요금을 설정합니다. (에센셜 필요)"
+help_action: "/dpm action <name> - 메뉴의 액션을 설정합니다."
+help_aliases: "/dpm aliases <name> <cmd> - 메뉴의 단축 명령어를 설정합니다."
+help_list: "/dpm list - 모든 메뉴를 보여줍니다."
+help_reload: "/dpm reload - 메뉴를 리로드합니다."
+menu_list_title: "<<< 메뉴 목록 >>>"
+reload_message: "설정을 다시 불러왔습니다."
+
+# events
+
+no_money: "소지금이 부족합니다."
+money_setting_wrong: "가격 설정이 잘못되었습니다."
+money_wrong_lore: "가격 : "
+money_setting: "설정하실 가격을 입력하세요."
+action_setting: "설정하실 액션을 입력하세요."
+cwc_setting_false: "해당 슬롯을 클릭시 메뉴를 닫히지 않게 설정하였습니다."
+cwc_setting_true: "해당 슬롯을 클릭시 메뉴를 닫히게 설정하였습니다."
+
+# functions
+
+menu_exists: "이미 존재하는 메뉴입니다."
+menu_srow_wrong_num: "올바른 숫자를 입력해주세요."
+menu_srow_wrong: "메뉴의 행은 1~6 사이여야 합니다."
+menu_create: " 메뉴가 생성되었습니다."
+menu_not_exists: "존재하지 않는 메뉴입니다."
+menu_delete: " 메뉴가 삭제되었습니다."
+menu_title: "타이틀이 설정되었습니다. : "
+menu_aliases_description: "등록된 명령어 : "
+menu_aliases: "메뉴의 단축 명령어가 설정되었습니다. : "
+menu_row_set: "메뉴의 행이 설정되었습니다. : "
+menu_items: " 메뉴의 아이템 설정이 저장되었습니다."
+menu_title_not_set: "타이틀이 설정되지 않았습니다."
