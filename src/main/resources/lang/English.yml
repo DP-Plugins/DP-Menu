@@ -1,4 +1,6 @@
-lang: English
+Lang: English
+
+# Commands
 
 player_only: "This command is only available to players."
 help_open: "/dpm open <name> - Opens the menu."
@@ -16,6 +18,8 @@ help_reload: "/dpm reload - reload config file."
 menu_list_title: "<<< Menu List >>>"
 reload_message: "config file have been reloaded."
 
+# events
+
 no_money: "You don't have enough money."
 money_setting_wrong: "The price setting is incorrect."
 money_wrong_lore: "Price: "
@@ -23,6 +27,8 @@ money_setting: "Please enter the price to set."
 action_setting: "Please enter the action to set."
 cwc_setting_false: "The menu will not close when this slot is clicked."
 cwc_setting_true: "The menu will close when this slot is clicked."
+
+# functions
 
 menu_exists: "this menu already exists."
 menu_srow_wrong_num: "Please enter a valid number."

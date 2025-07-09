@@ -1,11 +1,10 @@
 package com.darksoldier1404.dpm.functions;
 
 import com.darksoldier1404.dpm.Menu;
-import com.darksoldier1404.dppc.api.essentials.MoneyAPI;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.api.placeholder.PlaceholderUtils;
 import com.darksoldier1404.dppc.lang.DLang;
 import com.darksoldier1404.dppc.utils.*;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -15,22 +14,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
-@SuppressWarnings("all")
 public class DPMFunction {
     private static final Menu plugin = Menu.getInstance();
     public static final Map<UUID, Quadruple<String, ItemStack, String, Integer>> currentEditItem = new HashMap<>();
     private static final DLang lang = plugin.data.getLang();
+
     public static void openMenu(Player p, String name) {
         if (!isValid(name)) return;
         DInventory inv = getMenuInventory(name);
         for (int i = 0; i < inv.getSize(); i++) {
             if (inv.getItem(i) == null) continue;
-            int finalI = i;
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                inv.setItem(finalI, initPlaceHolder(inv.getItem(finalI), p));
-            });
+            inv.setItem(i, initPlaceHolder(inv.getItem(i), p));
         }
-        p.openInventory(inv);
+        p.openInventory(inv.getInventory());
     }
 
     public static void createMenu(Player p, String name, String srow) {
@@ -74,7 +70,7 @@ public class DPMFunction {
         }
         String title = ColorUtils.applyColor(getText(args, 2));
         plugin.menus.get(name).set("Menu.TITLE", title);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_title")+ title);
+        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_title") + title);
         saveMenu(name);
     }
 
@@ -91,15 +87,15 @@ public class DPMFunction {
         saveMenu(name);
     }
 
-    public static String getMenuNameByAliases(String aliases) {
-        for (String name : plugin.menus.keySet()) {
-            if (plugin.menus.get(name).getConfigurationSection("Menu.ALIASES").getKeys(false) == null) continue;
-            if (plugin.menus.get(name).getString("Menu.ALIASES").equalsIgnoreCase(aliases)) {
-                return name;
-            }
-        }
-        return null;
-    }
+//    public static String getMenuNameByAliases(String aliases) {
+//        for (String name : plugin.menus.keySet()) {
+//            if (plugin.menus.get(name).getConfigurationSection("Menu.ALIASES").getKeys(false) == null) continue;
+//            if (plugin.menus.get(name).getString("Menu.ALIASES").equalsIgnoreCase(aliases)) {
+//                return name;
+//            }
+//        }
+//        return null;
+//    }
 
     public static void setRow(Player p, String name, String srow) {
         if (!isValid(name)) {
@@ -129,7 +125,7 @@ public class DPMFunction {
         }
         DInventory inv = getMenuInventory(name);
         inv.setObj(Tuple.of(name, "ITEMS"));
-        p.openInventory(inv);
+        p.openInventory(inv.getInventory());
     }
 
     public static void saveItemSetting(Player p, String name, DInventory inv) {
@@ -153,7 +149,7 @@ public class DPMFunction {
         String rows = data.getString("Menu.ROWS");
         String title = data.getString("Menu.TITLE") == null ? lang.get("menu_title_not_set") : data.getString("Menu.TITLE");
         title = ColorUtils.applyColor(title);
-        DInventory inv = new DInventory(null, title, Integer.parseInt(rows) * 9, plugin);
+        DInventory inv = new DInventory(title, Integer.parseInt(rows) * 9, plugin);
         if (data.get("Menu.ITEMS") != null) {
             data.getConfigurationSection("Menu.ITEMS").getKeys(false).forEach(key -> {
                 inv.setItem(Integer.parseInt(key), data.getItemStack("Menu.ITEMS." + key));
@@ -169,7 +165,7 @@ public class DPMFunction {
         }
         DInventory inv = getMenuInventory(name);
         inv.setObj(Tuple.of(name, "PRICE"));
-        p.openInventory(inv);
+        p.openInventory(inv.getInventory());
     }
 
     public static void openPriceSettingGUI(Player p, String name, ItemStack item, int slot) {
@@ -180,7 +176,7 @@ public class DPMFunction {
         DInventory inv = getMenuInventory(name);
         inv.setItem(slot, item);
         inv.setObj(Tuple.of(name, "PRICE"));
-        p.openInventory(inv);
+        p.openInventory(inv.getInventory());
     }
 
     public static ItemStack setPrice(ItemStack item, String price) {
@@ -219,17 +215,8 @@ public class DPMFunction {
         return s.toString();
     }
 
-    public static void openCWCSettingGUI(Player p, String name) {
-        if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
-            return;
-        }
-        DInventory inv = getMenuInventory(name);
-        inv.setObj(Tuple.of(name, "CWC"));
-        p.openInventory(inv);
-    }
-
     public static ItemStack initPlaceHolder(ItemStack item, Player p) {
+        if (item == null || item.getType() == Material.AIR) return item;
         ItemMeta im = item.getItemMeta();
         if (im.hasDisplayName()) {
             im.setDisplayName(initReplacer(item, im.getDisplayName(), p));
@@ -246,21 +233,8 @@ public class DPMFunction {
     }
 
     public static String initReplacer(ItemStack item, String text, Player p) {
-        text = text.replace("<price>", NBT.getStringTag(item, "dpm.price"));
-        text = text.replace("<cwc>", NBT.getStringTag(item, "dpm.cwc"));
-        text = text.replace("<p_name>", p.getName());
-        text = text.replace("<p_displayname>", p.getDisplayName());
-        text = text.replace("<p_money>", MoneyAPI.getMoney(p).toString());
-        text = text.replace("<p_level>", String.valueOf(p.getLevel()));
-        text = text.replace("<p_exp>", String.valueOf(p.getExp()));
-        text = text.replace("<p_health>", String.valueOf(p.getHealth()));
-        text = text.replace("<p_maxhealth>", String.valueOf(p.getMaxHealth()));
-        text = text.replace("<p_food>", String.valueOf(p.getFoodLevel()));
-        text = text.replace("<p_gamemode>", String.valueOf(p.getGameMode()));
-        text = text.replace("<p_world>", p.getWorld().getName());
-        text = text.replace("<p_x>", String.valueOf(p.getLocation().getBlockX()));
-        text = text.replace("<p_y>", String.valueOf(p.getLocation().getBlockY()));
-        text = text.replace("<p_z>", String.valueOf(p.getLocation().getBlockZ()));
+        if (item == null || item.getType() == Material.AIR) return text;
+        text = PlaceholderUtils.applyPlaceholder(p, text);
         return text;
     }
 
@@ -271,6 +245,6 @@ public class DPMFunction {
         }
         DInventory inv = getMenuInventory(name);
         inv.setObj(Tuple.of(name, "ACTION"));
-        p.openInventory(inv);
+        p.openInventory(inv.getInventory());
     }
 }

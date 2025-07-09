@@ -22,7 +22,6 @@ public class DPMCommand {
         lang = plugin.data.getLang();
         builder = new CommandBuilder(plugin.data.getPrefix());
 
-
         builder.addSubCommand("open", "dpm_use", lang.get("help_open"), true, (p, args) -> {
             if (args.length == 2) DPMFunction.openMenu((Player) p, args[1]);
             else p.sendMessage(prefix + lang.get("help_open"));
@@ -46,10 +45,6 @@ public class DPMCommand {
         builder.addSubCommand("items", "dpm_admin", lang.get("help_items"), true, (p, args) -> {
             if (args.length == 2) DPMFunction.openItemSettingGUI((Player) p, args[1]);
             else p.sendMessage(prefix + lang.get("help_items"));
-        });
-        builder.addSubCommand("cwc", "dpm_admin", lang.get("help_cwc"), true, (p, args) -> {
-            if (args.length == 2) DPMFunction.openCWCSettingGUI((Player) p, args[1]);
-            else p.sendMessage(prefix + lang.get("help_cwc"));
         });
         builder.addSubCommand("price", "dpm_admin", lang.get("help_price"), true, (p, args) -> {
             if (args.length == 2) DPMFunction.openPriceSettingGUI((Player) p, args[1]);
@@ -76,11 +71,10 @@ public class DPMCommand {
 
         builder.addSubCommand("action", "dpm_admin", lang.get("help_action"), false, (p, args) -> {
             if (args.length == 2) {
-                DPMFunction.openActionSettingGUI((Player)p, args[1]);
+                DPMFunction.openActionSettingGUI((Player) p, args[1]);
             } else p.sendMessage(prefix + lang.get("help_action"));
         });
-        List<String> commands = Arrays.asList("create", "delete", "row", "items", "action", "cwc", "price", "aliases");
-        for (String c : commands) {
+        for (String c : builder.getSubCommandNames()) {
             builder.addTabCompletion(c, args -> plugin.menus.keySet().stream().toList());
         }
     }

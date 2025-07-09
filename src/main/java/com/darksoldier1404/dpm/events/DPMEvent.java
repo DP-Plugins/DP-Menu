@@ -5,7 +5,6 @@ import com.darksoldier1404.dpm.functions.DPMFunction;
 import com.darksoldier1404.dppc.DPPCore;
 import com.darksoldier1404.dppc.api.essentials.MoneyAPI;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
-import com.darksoldier1404.dppc.builder.action.ActionBuilder;
 import com.darksoldier1404.dppc.lang.DLang;
 import com.darksoldier1404.dppc.utils.NBT;
 import com.darksoldier1404.dppc.utils.Quadruple;
@@ -26,6 +25,7 @@ public class DPMEvent implements Listener {
     private final Menu plugin = Menu.getInstance();
     private final String prefix = plugin.data.getPrefix();
     private final DLang lang = plugin.data.getLang();
+
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
         String cmd = e.getMessage().split(" ")[0].substring(1);
@@ -39,9 +39,9 @@ public class DPMEvent implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (e.getInventory() instanceof DInventory) {
-            DInventory inv = (DInventory) e.getInventory();
-            if(!inv.isValidHandler(plugin)) return;
+        if (e.getInventory().getHolder() instanceof DInventory) {
+            DInventory inv = (DInventory) e.getInventory().getHolder();
+            if (!inv.isValidHandler(plugin)) return;
             if (inv.getObj() == null) {
                 return;
             }
@@ -51,14 +51,13 @@ public class DPMEvent implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getInventory() instanceof DInventory) {
-            DInventory inv = (DInventory) e.getInventory();
-            if(!inv.isValidHandler(plugin)) return;
+        if (e.getInventory().getHolder() instanceof DInventory) {
+            DInventory inv = (DInventory) e.getInventory().getHolder();
+            if (!inv.isValidHandler(plugin)) return;
             if (e.getCurrentItem() == null) return;
             ItemStack item = e.getCurrentItem();
             Player p = (Player) e.getWhoClicked();
             if (inv.getObj() == null) {
-                if(!(inv.getObj() instanceof Tuple)) return;
                 e.setCancelled(true);
                 if (NBT.hasTagKey(item, "dpm.price")) {
                     String sprice = NBT.getStringTag(item, "dpm.price");
@@ -66,7 +65,7 @@ public class DPMEvent implements Listener {
                         double price = Double.parseDouble(sprice);
                         if (MoneyAPI.hasEnoughMoney(p, price)) {
                             MoneyAPI.takeMoney(p, price);
-                        }else{
+                        } else {
                             p.sendMessage(prefix + lang.get("no_money"));
                             return;
                         }
@@ -76,20 +75,18 @@ public class DPMEvent implements Listener {
                         return;
                     }
                 }
-                if (NBT.hasTagKey(item, "dpm.action")){
+                if (NBT.hasTagKey(item, "dpm.action")) {
                     String actionName = NBT.getStringTag(item, "dpm.action");
                     DPPCore.actions.get(actionName).execute(p);
                     return;
                 }
-                if (NBT.hasTagKey(item, "dpm.cwc")) {
-                    p.closeInventory();
-                }
                 return;
             }
+            if (!(inv.getObj() instanceof Tuple)) return;
             Tuple<String, String> t = (Tuple<String, String>) inv.getObj();
             String b = t.getB();
             if (!b.equalsIgnoreCase("ITEMS")) {
-                if(e.getClickedInventory().getType() == InventoryType.PLAYER) {
+                if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
                     return;
                 }
                 e.setCancelled(true);
@@ -98,19 +95,10 @@ public class DPMEvent implements Listener {
                     p.closeInventory();
                     p.sendMessage(prefix + lang.get("money_setting"));
                 }
-                if (b.equalsIgnoreCase("action")){
+                if (b.equalsIgnoreCase("action")) {
                     DPMFunction.currentEditItem.put(p.getUniqueId(), Quadruple.of(t.getA(), item, "action", e.getSlot()));
                     p.closeInventory();
                     p.sendMessage(prefix + lang.get("action_setting"));
-                }
-                if (b.equalsIgnoreCase("cwc")) {
-                    if (NBT.hasTagKey(item, "dpm.cwc")) {
-                        e.setCurrentItem(NBT.removeTag(item, "dpm.cwc"));
-                        p.sendMessage(prefix + lang.get("cwc_setting_false"));
-                    } else {
-                        e.setCurrentItem(NBT.setStringTag(item, "dpm.cwc", "true"));
-                        p.sendMessage(prefix + lang.get("cwc_setting_true"));
-                    }
                 }
             }
         }

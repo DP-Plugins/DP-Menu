@@ -1,5 +1,7 @@
 Lang: Korean
+
 # commands
+
 player_only: "플레이어만 사용 가능한 명령어 입니다."
 help_open: "/dpm open <name> - 메뉴를 오픈합니다."
 help_create: "/dpm create <name> <row> - 메뉴를 생성합니다."
