@@ -11,7 +11,7 @@
 
 **All DP-Plugins depend on the [DPP-Core](https://dpnw.site/plugin/DPP-Core) plugin. <br>Please make sure to install [DPP-Core](https://dpnw.site/plugin/DPP-Core)**
 
-<bold> Discord </bold>
+**Discord**
 **Join our Discord server to get support and stay updated with the latest news and updates.
 If you have any questions or suggestions, please join our Discord server.
 If you find any bugs, please report them using the inquiry channel.**
@@ -21,16 +21,16 @@ If you find any bugs, please report them using the inquiry channel.**
 <br>
 <br>
 
-<bold> DP-Menu Plugin Introduction </bold>
+**DP-Menu Plugin Introduction**
 
 DP-Menu is a Minecraft plugin that allows for easy creation and management of menu on servers.
 
-<bold> Plugin Features </bold>
+**Plugin Features**
 - **GUI-Based Configuration**: Easily set items and prices using a graphical interface.
 - **DLang Support**: You can freely edit language files.
 - **Action Support**: Make simple action and set.
 
-<bold> Commands </bold>
+**Commands**
 | Command | Description | Permission |
 |---------|-------------|-------|
 | `/dpm create <name> <row>` | Creates a menu. | dpm_admin |
@@ -45,7 +45,7 @@ DP-Menu is a Minecraft plugin that allows for easy creation and management of me
 | `/dpm reload` | reload config file. | dpm_admin |
 | `/dpm open <name>` | Opens the menu. | dpm_use |
 
-<bold> Usage Examples </bold>
+**Usage Examples**
 - Create a menu: `/dpm create testmenu 6`
 - Set menu items: `/dpm items testmenu`
 - Set actions: `/dpm action testmenu`
