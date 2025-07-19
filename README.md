@@ -51,6 +51,6 @@ DP-Menu is a Minecraft plugin that allows for easy creation and management of me
 - Set actions: `/dpm action testmenu`
 - Open menu: `/dpm open testmenu`
 
-<iframe width="1264" height="711" src="https://www.youtube.com/embed/Xi_ApK2UmAc" title="DP-Menu Example" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Xi_ApK2UmAc?si=x7oeoepf1PM2d52e" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
-<iframe width="1264" height="711" src="https://www.youtube.com/embed/qd9jXxXIU5g" title="DPP-Core Action example" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qd9jXxXIU5g?si=PIfqnQHQK-RzOPOI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
