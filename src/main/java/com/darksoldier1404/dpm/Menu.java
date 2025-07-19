@@ -23,7 +23,7 @@ public class Menu extends JavaPlugin {
     @Override
     public void onLoad() {
         plugin = this;
-        PluginUtil.addPlugin(plugin, 15781);
+        PluginUtil.addPlugin(plugin, 26570);
     }
 
     @Override
