@@ -7,7 +7,7 @@ group 'com.darksoldier1404'
 
 // ##################################################
 
-version = '1.0.1.5'
+version = '1.0.1.6'
 var pluginName = 'DP-Menu'
 var packageName = 'com.darksoldier1404.dpm'
 var apiVersion = '1.14.4'
