@@ -1,9 +1,7 @@
 package com.darksoldier1404.dpm.functions;
 
-import com.darksoldier1404.dpm.Menu;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
 import com.darksoldier1404.dppc.api.placeholder.PlaceholderUtils;
-import com.darksoldier1404.dppc.lang.DLang;
 import com.darksoldier1404.dppc.utils.*;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,10 +12,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
+import static com.darksoldier1404.dpm.Menu.plugin;
+
 public class DPMFunction {
-    private static final Menu plugin = Menu.getInstance();
     public static final Map<UUID, Quadruple<String, ItemStack, String, Integer>> currentEditItem = new HashMap<>();
-    private static final DLang lang = plugin.data.getLang();
 
     public static void openMenu(Player p, String name) {
         if (!isValid(name)) return;
@@ -31,18 +29,18 @@ public class DPMFunction {
 
     public static void createMenu(Player p, String name, String srow) {
         if (isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_exists"));
             return;
         }
         int row;
         try {
             row = Integer.parseInt(srow);
         } catch (NumberFormatException e) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong_num"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_srow_wrong_num"));
             return;
         }
         if (row < 1 || row > 6) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_srow_wrong"));
             return;
         }
         YamlConfiguration data = new YamlConfiguration();
@@ -50,77 +48,67 @@ public class DPMFunction {
         data.set("Menu.ROWS", row);
         plugin.menus.put(name, data);
         saveMenu(name);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_create"));
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_create"));
     }
 
     public static void deleteMenu(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         new File(plugin.getDataFolder() + "/menus/" + name + ".yml").delete();
         plugin.menus.remove(name);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_delete"));
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_delete"));
     }
 
     public static void setTitle(Player p, String name, String... args) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         String title = ColorUtils.applyColor(getText(args, 2));
         plugin.menus.get(name).set("Menu.TITLE", title);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_title") + title);
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_title") + title);
         saveMenu(name);
     }
 
     public static void setAliases(Player p, String name, String aliases) {
         if (!plugin.menus.containsKey(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         YamlConfiguration data = plugin.menus.get(name);
         data.set("Menu.ALIASES", aliases);
         plugin.menus.put(name, data);
-        plugin.getLogger().info(lang.get("menu_aliases_description") + aliases);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_aliases") + aliases);
+        plugin.getLogger().info(plugin.getLang().get("menu_aliases_description") + aliases);
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_aliases") + aliases);
         saveMenu(name);
     }
 
-//    public static String getMenuNameByAliases(String aliases) {
-//        for (String name : plugin.menus.keySet()) {
-//            if (plugin.menus.get(name).getConfigurationSection("Menu.ALIASES").getKeys(false) == null) continue;
-//            if (plugin.menus.get(name).getString("Menu.ALIASES").equalsIgnoreCase(aliases)) {
-//                return name;
-//            }
-//        }
-//        return null;
-//    }
-
     public static void setRow(Player p, String name, String srow) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         int row;
         try {
             row = Integer.parseInt(srow);
         } catch (NumberFormatException e) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong_num"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_srow_wrong_num"));
             return;
         }
         if (row < 1 || row > 6) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_srow_wrong"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_srow_wrong"));
             return;
         }
         plugin.menus.get(name).set("Menu.ROWS", row);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_row_set") + row);
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_row_set") + row);
         saveMenu(name);
     }
 
     public static void openItemSettingGUI(Player p, String name) { // 1
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -141,13 +129,13 @@ public class DPMFunction {
             }
         }
         saveMenu(name);
-        p.sendMessage(plugin.data.getPrefix() + name + lang.get("menu_items"));
+        p.sendMessage(plugin.getPrefix() + name + plugin.getLang().get("menu_items"));
     }
 
     public static DInventory getMenuInventory(String name) {
         YamlConfiguration data = plugin.menus.get(name);
         String rows = data.getString("Menu.ROWS");
-        String title = data.getString("Menu.TITLE") == null ? lang.get("menu_title_not_set") : data.getString("Menu.TITLE");
+        String title = data.getString("Menu.TITLE") == null ? plugin.getLang().get("menu_title_not_set") : data.getString("Menu.TITLE");
         title = ColorUtils.applyColor(title);
         DInventory inv = new DInventory(title, Integer.parseInt(rows) * 9, plugin);
         if (data.get("Menu.ITEMS") != null) {
@@ -160,7 +148,7 @@ public class DPMFunction {
 
     public static void openPriceSettingGUI(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -170,7 +158,7 @@ public class DPMFunction {
 
     public static void openPriceSettingGUI(Player p, String name, ItemStack item, int slot) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
@@ -240,7 +228,7 @@ public class DPMFunction {
 
     public static void openActionSettingGUI(Player p, String name) {
         if (!isValid(name)) {
-            p.sendMessage(plugin.data.getPrefix() + lang.get("menu_not_exists"));
+            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
             return;
         }
         DInventory inv = getMenuInventory(name);
