@@ -4,6 +4,8 @@ import com.darksoldier1404.dpm.functions.DPMFunction;
 import com.darksoldier1404.dppc.DPPCore;
 import com.darksoldier1404.dppc.api.essentials.MoneyAPI;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.events.dinventory.DInventoryClickEvent;
+import com.darksoldier1404.dppc.events.dinventory.DInventoryCloseEvent;
 import com.darksoldier1404.dppc.utils.NBT;
 import com.darksoldier1404.dppc.utils.Quadruple;
 import com.darksoldier1404.dppc.utils.Tuple;
@@ -11,8 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -36,68 +36,64 @@ public class DPMEvent implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
-        if (e.getInventory().getHolder() instanceof DInventory) {
-            DInventory inv = (DInventory) e.getInventory().getHolder();
-            if (!inv.isValidHandler(plugin)) return;
-            if (inv.getObj() == null) {
-                return;
-            }
-            DPMFunction.saveItemSetting((Player) e.getPlayer(), ((Tuple<String, String>) inv.getObj()).getA(), inv);
+    public void onInventoryClose(DInventoryCloseEvent e) {
+        DInventory inv = e.getDInventory();
+        if (!inv.isValidHandler(plugin)) return;
+        if (inv.getObj() == null) {
+            return;
         }
+        DPMFunction.saveItemSetting((Player) e.getPlayer(), ((Tuple<String, String>) inv.getObj()).getA(), inv);
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getInventory().getHolder() instanceof DInventory) {
-            DInventory inv = (DInventory) e.getInventory().getHolder();
-            if (!inv.isValidHandler(plugin)) return;
-            ItemStack item = e.getCurrentItem();
-            Player p = (Player) e.getWhoClicked();
-            if (inv.getObj() == null) {
-                e.setCancelled(true);
-                if (e.getCurrentItem() == null) return;
-                if (NBT.hasTagKey(item, "dpm.price")) {
-                    String sprice = NBT.getStringTag(item, "dpm.price");
-                    try {
-                        double price = Double.parseDouble(sprice);
-                        if (MoneyAPI.hasEnoughMoney(p, price)) {
-                            MoneyAPI.takeMoney(p, price);
-                        } else {
-                            p.sendMessage(plugin.getPrefix() + plugin.getLang().get("no_money"));
-                            return;
-                        }
-                    } catch (Exception ex) {
-                        p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_setting_wrong"));
-                        p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_wrong_lore") + NBT.getStringTag(item, "dpm.price"));
+    public void onInventoryClick(DInventoryClickEvent e) {
+        DInventory inv = e.getDInventory();
+        if (!inv.isValidHandler(plugin)) return;
+        ItemStack item = e.getCurrentItem();
+        Player p = (Player) e.getWhoClicked();
+        if (inv.getObj() == null) {
+            e.setCancelled(true);
+            if (e.getCurrentItem() == null) return;
+            if (NBT.hasTagKey(item, "dpm.price")) {
+                String sprice = NBT.getStringTag(item, "dpm.price");
+                try {
+                    double price = Double.parseDouble(sprice);
+                    if (MoneyAPI.hasEnoughMoney(p, price)) {
+                        MoneyAPI.takeMoney(p, price);
+                    } else {
+                        p.sendMessage(plugin.getPrefix() + plugin.getLang().get("no_money"));
                         return;
                     }
-                }
-                if (NBT.hasTagKey(item, "dpm.action")) {
-                    String actionName = NBT.getStringTag(item, "dpm.action");
-                    DPPCore.actions.get(actionName).execute(p);
+                } catch (Exception ex) {
+                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_setting_wrong"));
+                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_wrong_lore") + NBT.getStringTag(item, "dpm.price"));
                     return;
                 }
+            }
+            if (NBT.hasTagKey(item, "dpm.action")) {
+                String actionName = NBT.getStringTag(item, "dpm.action");
+                DPPCore.actions.get(actionName).execute(p);
                 return;
             }
-            if (!(inv.getObj() instanceof Tuple)) return;
-            Tuple<String, String> t = (Tuple<String, String>) inv.getObj();
-            String b = t.getB();
-            if (!b.equalsIgnoreCase("ITEMS")) {
-                if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
-                    return;
-                }
-                e.setCancelled(true);
-                if (b.equalsIgnoreCase("price")) {
-                    DPMFunction.currentEditItem.put(p.getUniqueId(), Quadruple.of(t.getA(), item, "price", e.getSlot()));
-                    p.closeInventory();
-                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_setting"));
-                }
-                if (b.equalsIgnoreCase("action")) {
-                    DPMFunction.currentEditItem.put(p.getUniqueId(), Quadruple.of(t.getA(), item, "action", e.getSlot()));
-                    p.closeInventory();
-                    p.sendMessage(plugin.getPrefix() + plugin.getLang().get("action_setting"));
-                }
+            return;
+        }
+        if (!(inv.getObj() instanceof Tuple)) return;
+        Tuple<String, String> t = (Tuple<String, String>) inv.getObj();
+        String b = t.getB();
+        if (!b.equalsIgnoreCase("ITEMS")) {
+            if (e.getClickedInventory().getType() == InventoryType.PLAYER) {
+                return;
+            }
+            e.setCancelled(true);
+            if (b.equalsIgnoreCase("price")) {
+                DPMFunction.currentEditItem.put(p.getUniqueId(), Quadruple.of(t.getA(), item, "price", e.getSlot()));
+                p.closeInventory();
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("money_setting"));
+            }
+            if (b.equalsIgnoreCase("action")) {
+                DPMFunction.currentEditItem.put(p.getUniqueId(), Quadruple.of(t.getA(), item, "action", e.getSlot()));
+                p.closeInventory();
+                p.sendMessage(plugin.getPrefix() + plugin.getLang().get("action_setting"));
             }
         }
     }
