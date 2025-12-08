@@ -4,6 +4,8 @@ import com.darksoldier1404.dpm.functions.DPMFunction;
 import com.darksoldier1404.dppc.DPPCore;
 import com.darksoldier1404.dppc.api.essentials.MoneyAPI;
 import com.darksoldier1404.dppc.api.inventory.DInventory;
+import com.darksoldier1404.dppc.builder.action.ActionBuilder;
+import com.darksoldier1404.dppc.builder.action.obj.Action;
 import com.darksoldier1404.dppc.events.dinventory.DInventoryClickEvent;
 import com.darksoldier1404.dppc.events.dinventory.DInventoryCloseEvent;
 import com.darksoldier1404.dppc.utils.NBT;
@@ -72,7 +74,12 @@ public class DPMEvent implements Listener {
             }
             if (NBT.hasTagKey(item, "dpm.action")) {
                 String actionName = NBT.getStringTag(item, "dpm.action");
-                DPPCore.actions.get(actionName).execute(p);
+                ActionBuilder a = DPPCore.actions.get(actionName);
+                if (a == null) {
+                    p.sendMessage(plugin.getPrefix() + "action not found : " + actionName);
+                    return;
+                }
+                a.execute(p);
                 return;
             }
             return;
