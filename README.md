@@ -1,56 +1,114 @@
-<p align="center">
-  <img src="https://dpnw.site/assets/img/logo.png" alt="logo" width="180" />
-</p>
-<p align="center">
-  <a href="https://dpnw.site" target="_blank"><img src="https://dpnw.site/assets/img/desc_card/icon_banner-dp-site.png" alt="사이트" height="40" style="margin-right:8px;"/></a>
-  <a href="https://discord.gg/JnMCqkn2FX" target="_blank"><img src="https://dpnw.site/assets/img/desc_card/icon_banner-discord.png" alt="디스코드" height="40" style="margin-right:8px;"/></a>
-  <a href="https://github.com/DP-Plugins" target="_blank"><img src="https://dpnw.site/assets/img/desc_card/icon_banner-github.png" alt="깃허브" height="40"/></a>
-</p>
+<center><img src="https://i.postimg.cc/MKPVVR1s/dplogo-512.png" alt="logo"></center>
+<center><img src="https://i.postimg.cc/RZ9dqPFx/introduce.png" alt="introduce"></center>
 
-![](https://dpnw.site/assets/img/desc_card/dppcore.jpg)
+DP-Menu allows server administrators to create and manage **custom GUI menus** in-game.  
+Menus can execute various actions when players click items, using the **DPP-Core Action system** to trigger commands, open other menus, give items, run server logic, and more.
 
-**All DP-Plugins depend on the [DPP-Core](https://dpnw.site/plugin/DPP-Core) plugin. <br>Please make sure to install [DPP-Core](https://dpnw.site/plugin/DPP-Core)**
+---
 
-**Discord**
-**Join our Discord server to get support and stay updated with the latest news and updates.
-If you have any questions or suggestions, please join our Discord server.
-If you find any bugs, please report them using the inquiry channel.**
+<center><img src="https://i.postimg.cc/RZ9dqP08/description.png" alt="description"></center>
 
-<span style="font-size: 18px;">**Discord Invite: https://discord.gg/JnMCqkn2FX**</span>
+- Create fully customizable **GUI menus** with multiple rows and pages  
+- Edit menu items directly through an **in-game GUI editor**  
+- Assign **DPP-Core Actions** to item clicks (command, open menu, give item, etc.)  
+- Set **prices** for menu items using economy integration  
+- Use **PlaceholderAPI** placeholders in item names and lore  
+- Supports command **aliases** to open menus easily  
 
-<br>
-<br>
+---
 
-**DP-Menu Plugin Introduction**
+<center><img src="https://i.postimg.cc/rwcjzhpH/depend-plugin.png" alt="depend-plugin"></center>
 
-DP-Menu is a Minecraft plugin that allows for easy creation and management of menu on servers.
+- All DP-Plugins require the **`DPP-Core`** plugin  
+- The plugin will not work if **`DPP-Core`** is not installed  
+- You can download **`DPP-Core`** here: <a href="https://github.com/DP-Plugins/DPP-Core/releases" target="_blank">Click me!</a>  
+- **PlaceholderAPI** is optional (used for dynamic text)  
+- **Essentials / Economy plugin** is optional (used only for price actions)  
 
-**Plugin Features**
-- **GUI-Based Configuration**: Easily set items and prices using a graphical interface.
-- **DLang Support**: You can freely edit language files.
-- **Action Support**: Make simple action and set.
+---
 
-**Commands**
-| Command | Description | Permission |
-|---------|-------------|-------|
-| `/dpm create <name> <row>` | Creates a menu. | dpm_admin |
-| `/dpm delete <name>` | Deletes a menu. | dpm_admin |
-| `/dpm title <name> <title>` | Sets the title of this menu. | dpm_admin |
-| `/dpm row <name> <row>` | Sets the number of rows for this menu. | dpm_admin |
-| `/dpm items <name>` | Sets the items in this menu. | dpm_admin |
-| `/dpm price <name>` | Sets the cost for clicking in this menu. (Requires Essentials) | dpm_admin |
-| `/dpm action <name>` | Sets the action for this menu. | dpm_admin |
-| `/dpm aliases <name> <cmd>` | Sets the alias commands for this menu. | dpm_admin |
-| `/dpm list` | Shows all menus. | dpm_admin |
-| `/dpm reload` | reload config file. | dpm_admin |
-| `/dpm open <name>` | Opens the menu. | dpm_use |
+<center><img src="https://i.postimg.cc/dV01RxJB/installation.png" alt="installation"></center>
 
-**Usage Examples**
-- Create a menu: `/dpm create testmenu 6`
-- Set menu items: `/dpm items testmenu`
-- Set actions: `/dpm action testmenu`
-- Open menu: `/dpm open testmenu`
+1️⃣ Place the **`DPP-Core`** plugin and this plugin file (**`DP-Menu-*.jar`**) into your server’s **`plugins`** folder  
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Xi_ApK2UmAc?si=x7oeoepf1PM2d52e" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+2️⃣ Restart the server, and the plugin will be automatically enabled  
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/qd9jXxXIU5g?si=PIfqnQHQK-RzOPOI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+3️⃣ Menu data and language files will be generated automatically  
+
+---
+
+<center><img src="https://i.postimg.cc/jSKcC85K/settings.png" alt="settings"></center>
+
+- **Menu files**  
+  - Stored in `plugins/DP-Menu/menus/`  
+  - Each menu is saved as an individual `.yml` file  
+
+- **Language files**  
+  - `lang/en_US.yml`  
+  - `lang/ko_KR.yml`  
+
+- No global `config.yml`; all menu behavior is managed via **commands + DPP-Core actions**  
+
+---
+
+<center><img src="https://i.postimg.cc/SxqdjZKw/command.png" alt="command"></center>
+
+❗ Some commands require admin permission (`dpm.admin`)
+
+**Command List and Examples**
+
+| Command | Permission | Description | Example |
+|---|---|---|---|
+| `/dpm open <menu>` | dpm.use | Open a menu | `/dpm open MainMenu` |
+| `/dpm create <name> <rows>` | dpm.admin | Create a menu | `/dpm create MainMenu 4` |
+| `/dpm delete <name>` | dpm.admin | Delete a menu | `/dpm delete MainMenu` |
+| `/dpm title <name> <title>` | dpm.admin | Set menu title | `/dpm title MainMenu &6Main Menu` |
+| `/dpm row <name> <rows>` | dpm.admin | Change menu rows | `/dpm row MainMenu 5` |
+| `/dpm items <name>` | dpm.admin | Edit menu items | `/dpm items MainMenu` |
+| `/dpm price <name>` | dpm.admin | Set item prices | `/dpm price MainMenu` |
+| `/dpm action <name>` | dpm.admin | Assign DPP-Core actions to items | `/dpm action MainMenu` |
+| `/dpm aliases <name> <command>` | dpm.admin | Set command alias | `/dpm aliases MainMenu menu` |
+| `/dpm list` | dpm.admin | List all menus | `/dpm list` |
+| `/dpm reload` | dpm.admin | Reload menus | `/dpm reload` |
+
+**❗Notes when using commands**
+
+- Menu names must not contain spaces  
+- Item edits and action bindings are saved automatically  
+- Price actions require an economy plugin  
+- Admin commands require **OP** or `dpm.admin` permission  
+
+---
+
+<center><img src="https://i.postimg.cc/Z5ZH0fqL/api-integration.png" alt="api-integration"></center>
+
+**🔧 DPP-Core Action Integration**
+
+DP-Menu is **fully integrated with the DPP-Core Action system**.
+
+Each menu item can execute one or more **Actions** when clicked.  
+Actions are managed through `/dpm action <menu>` and stored using DPP-Core’s action framework.
+
+**Examples of supported actions include:**
+
+- Execute console or player commands  
+- Open another DP-Menu menu  
+- Give items or rewards  
+- Check player conditions (permissions, money, etc.)  
+- Combine multiple actions in sequence  
+
+This makes DP-Menu a **core hub plugin** that connects other DP plugins and server systems together through a unified action logic.
+
+Additional integrations:
+- **PlaceholderAPI** — Used to parse dynamic placeholders in item names and lore  
+- **Economy (via DPP-Core MoneyAPI)** — Used for price-based click actions  
+
+---
+
+<center><a href="https://discord.gg/JnMCqkn2FX"><img src="https://i.postimg.cc/4xZPn8dC/discord.png" alt="discord"></a></center>
+
+- https://discord.gg/JnMCqkn2FX  
+- Join our Discord for support, bug reports, or feature requests  
+- Feedback and improvement ideas are always welcome!
+
+---
