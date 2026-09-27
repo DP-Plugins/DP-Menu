@@ -14,6 +14,7 @@ Menus can execute various actions when players click items, using the **DPP-Core
 - Set **prices** for menu items using economy integration  
 - Use **PlaceholderAPI** placeholders in item names and lore  
 - Supports command **aliases** to open menus easily  
+- Open a **main menu** anytime with **Shift + F**  
 
 ---
 
@@ -47,7 +48,12 @@ Menus can execute various actions when players click items, using the **DPP-Core
   - `lang/en_US.yml`  
   - `lang/ko_KR.yml`  
 
-- No global `config.yml`; all menu behavior is managed via **commands + DPP-Core actions**  
+- **`config.yml`**  
+  - `Settings.Lang`: language file to use (`en_US`, `ko_KR`)  
+  - `Settings.prefix`: chat message prefix  
+  - `Settings.MainMenu`: menu opened with **Shift + F** (set with `/dpm main`, empty = disabled)  
+
+- Everything else about menu behavior is managed via **commands + DPP-Core actions**  
 
 ---
 
@@ -68,8 +74,9 @@ Menus can execute various actions when players click items, using the **DPP-Core
 | `/dpm price <name>` | dpm.admin | Set item prices | `/dpm price MainMenu` |
 | `/dpm action <name>` | dpm.admin | Assign DPP-Core actions to items | `/dpm action MainMenu` |
 | `/dpm aliases <name> <command>` | dpm.admin | Set command alias | `/dpm aliases MainMenu menu` |
+| `/dpm main [name]` | dpm.admin | Set the main menu opened with Shift + F (omit name to unset) | `/dpm main MainMenu` |
 | `/dpm list` | dpm.admin | List all menus | `/dpm list` |
-| `/dpm reload` | dpm.admin | Reload menus | `/dpm reload` |
+| `/dpm reload` | dpm.admin | Reload config and menus | `/dpm reload` |
 
 **❗Notes when using commands**
 
@@ -77,6 +84,7 @@ Menus can execute various actions when players click items, using the **DPP-Core
 - Item edits and action bindings are saved automatically  
 - Price actions require an economy plugin  
 - Admin commands require **OP** or `dpm.admin` permission  
+- **Shift + F** (sneak + swap hands) opens the main menu for players with `dpm.use`; if no main menu is set, F swaps hands as usual  
 
 ---
 
