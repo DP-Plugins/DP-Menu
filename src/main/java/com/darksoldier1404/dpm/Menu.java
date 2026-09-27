@@ -37,6 +37,13 @@ public class Menu extends DPlugin {
     }
 
     @Override
+    public void reload() {
+        super.reload();
+        menus.clear();
+        menus.loadAll(null);
+    }
+
+    @Override
     public void onDisable() {
         saveAllData();
     }

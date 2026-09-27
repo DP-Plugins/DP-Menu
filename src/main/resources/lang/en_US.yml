@@ -15,9 +15,9 @@ help_action: "/dpm action <name> - Sets the action for this menu."
 help_aliases: "/dpm aliases <name> <cmd> - Sets the alias commands for this menu."
 help_main: "/dpm main [name] - Sets the main menu opened with Shift + F. (Omit name to unset)"
 help_list: "/dpm list - Shows all menus."
-help_reload: "/dpm reload - reload config file."
+help_reload: "/dpm reload - Reloads the config and menu files."
 menu_list_title: "<<< Menu List >>>"
-reload_message: "config file have been reloaded."
+reload_message: "Config and menu files have been reloaded."
 
 # events
 
