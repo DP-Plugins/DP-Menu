@@ -4,6 +4,7 @@ import com.darksoldier1404.dppc.api.inventory.DInventory;
 import com.darksoldier1404.dppc.api.placeholder.PlaceholderUtils;
 import com.darksoldier1404.dppc.utils.*;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -224,6 +225,28 @@ public class DPMFunction {
         if (item == null || item.getType() == Material.AIR) return text;
         text = PlaceholderUtils.applyPlaceholder(p, text);
         return text;
+    }
+
+    public static String getMainMenu() {
+        String name = plugin.getConfig().getString("Settings.MainMenu");
+        if (name == null || name.isEmpty() || !isValid(name)) return null;
+        return name;
+    }
+
+    public static void setMainMenu(CommandSender sender, String name) {
+        if (!isValid(name)) {
+            sender.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_not_exists"));
+            return;
+        }
+        plugin.getConfig().set("Settings.MainMenu", name);
+        plugin.saveConfig();
+        sender.sendMessage(plugin.getPrefix() + plugin.getLang().get("main_menu_set") + name);
+    }
+
+    public static void removeMainMenu(CommandSender sender) {
+        plugin.getConfig().set("Settings.MainMenu", "");
+        plugin.saveConfig();
+        sender.sendMessage(plugin.getPrefix() + plugin.getLang().get("main_menu_remove"));
     }
 
     public static void openActionSettingGUI(Player p, String name) {

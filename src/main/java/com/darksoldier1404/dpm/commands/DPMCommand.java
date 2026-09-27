@@ -54,6 +54,12 @@ public class DPMCommand {
             else p.sendMessage(plugin.getPrefix() + plugin.getLang().get("help_aliases"));
             return true;
         });
+        builder.addSubCommand("main", "dpm.admin", plugin.getLang().get("help_main"), false, (p, args) -> {
+            if (args.length == 2) DPMFunction.setMainMenu(p, args[1]);
+            else if (args.length == 1) DPMFunction.removeMainMenu(p);
+            else p.sendMessage(plugin.getPrefix() + plugin.getLang().get("help_main"));
+            return true;
+        });
         builder.addSubCommand("list", "dpm.admin", plugin.getLang().get("help_list"), true, (p, args) -> {
             if (args.length == 1) {
                 p.sendMessage(plugin.getPrefix() + plugin.getLang().get("menu_list_title"));
