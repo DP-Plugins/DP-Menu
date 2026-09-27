@@ -70,7 +70,7 @@ public class DPMCommand {
             return true;
         });
         builder.addSubCommand("reload", "dpm.admin", plugin.getLang().get("help_reload"), true, (p, args) -> {
-            if (args.length == 3) {
+            if (args.length == 1) {
                 plugin.reload();
                 p.sendMessage(plugin.getPrefix() + plugin.getLang().get("reload_message"));
             } else p.sendMessage(plugin.getPrefix() + plugin.getLang().get("help_reload"));

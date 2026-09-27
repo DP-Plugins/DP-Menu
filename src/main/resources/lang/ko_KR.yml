@@ -15,9 +15,9 @@ help_action: "/dpm action <name> - 메뉴의 액션을 설정합니다."
 help_aliases: "/dpm aliases <name> <cmd> - 메뉴의 단축 명령어를 설정합니다."
 help_main: "/dpm main [name] - Shift + F 로 열리는 메인 메뉴를 설정합니다. (이름 생략 시 해제)"
 help_list: "/dpm list - 모든 메뉴를 보여줍니다."
-help_reload: "/dpm reload - 메뉴를 리로드합니다."
+help_reload: "/dpm reload - 설정과 메뉴 파일을 리로드합니다."
 menu_list_title: "<<< 메뉴 목록 >>>"
-reload_message: "설정을 다시 불러왔습니다."
+reload_message: "설정과 메뉴를 다시 불러왔습니다."
 
 # events
 
