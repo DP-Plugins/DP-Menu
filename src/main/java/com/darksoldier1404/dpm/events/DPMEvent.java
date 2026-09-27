@@ -18,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 
 import static com.darksoldier1404.dpm.Menu.plugin;
@@ -35,6 +36,17 @@ public class DPMEvent implements Listener {
                 plugin.getServer().dispatchCommand(e.getPlayer(), "dpm open " + m.getString("Menu.NAME"));
             }
         });
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onSwapHand(PlayerSwapHandItemsEvent e) {
+        Player p = e.getPlayer();
+        if (!p.isSneaking()) return;
+        if (!p.hasPermission("dpm.use")) return;
+        String mainMenu = DPMFunction.getMainMenu();
+        if (mainMenu == null) return;
+        e.setCancelled(true);
+        DPMFunction.openMenu(p, mainMenu);
     }
 
     @EventHandler

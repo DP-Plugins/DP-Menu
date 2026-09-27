@@ -13,10 +13,11 @@ help_cwc: "/dpm cwc <name> - Sets whether the menu closes when an item is clicke
 help_price: "/dpm price <name> - Sets the cost for clicking in this menu. (Requires Essentials)"
 help_action: "/dpm action <name> - Sets the action for this menu."
 help_aliases: "/dpm aliases <name> <cmd> - Sets the alias commands for this menu."
+help_main: "/dpm main [name] - Sets the main menu opened with Shift + F. (Omit name to unset)"
 help_list: "/dpm list - Shows all menus."
-help_reload: "/dpm reload - reload config file."
+help_reload: "/dpm reload - Reloads the config and menu files."
 menu_list_title: "<<< Menu List >>>"
-reload_message: "config file have been reloaded."
+reload_message: "Config and menu files have been reloaded."
 
 # events
 
@@ -42,3 +43,5 @@ menu_aliases: "The alias command for this menu has been set: "
 menu_row_set: "The number of rows for this menu has been set: "
 menu_items: "The item settings for this menu have been saved."
 menu_title_not_set: "The title has not been set."
+main_menu_set: "The main menu has been set: "
+main_menu_remove: "The main menu has been unset."
